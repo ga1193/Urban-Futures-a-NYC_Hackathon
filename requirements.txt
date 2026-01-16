@@ -1,5 +1,9 @@
 shiny
 seaborn
-pandas = 3.11
+python = 3.11
+pandas
 folium
 jupyter
+sodapy
+ipyleaflet
+geopandas
