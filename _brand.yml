@@ -1,0 +1,46 @@
+meta:
+  name: Test
+  link:
+    home: testing123
+    
+logo:
+  images:
+    icon:
+      path: images/x.png
+      alt: Ubran Futures Hackathon Logo
+  small: images/x.png
+
+color:
+  palette:
+    dark-purple: "#93358c"
+    light-purple: "#f8f6fb"
+    teal: "#04afaf"
+    dark-blue: "#086992"
+    hot-pink: "#eb068c"
+    light-blue: "#1aade4"
+
+  background: light-purple
+  foreground: black
+  primary: dark-purple
+  secondary: hot-pink
+  tertiary: light-blue
+  dark: black
+
+typography:
+  fonts:
+    - family: Libre Franklin
+      source: google
+      weight: [400, 700]
+
+  base:
+    family: Libre Franklin
+    weight: 400
+
+  headings:
+    family: Libre Franklin
+    weight: 700
+    color: dark-purple
+
+  link:
+    color: primary
+    decoration: none

@@ -1,0 +1,106 @@
+---
+title: "Rain Garden Decision Support Tool"
+subtitle:  "Urban Futures Hackathon: Hadrosaur Footprints"
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+## Interactive Map
+```{python}
+#| echo: false
+import requests
+import pandas as pd
+import numpy as np
+from plotnine import *
+import folium
+import matplotlib as plt
+from sodapy import Socrata
+%matplotlib inline
+
+#min_lon, max_lon = 45, 30
+#min_lat, max_lat = -80, -70
+m = folium.Map(location=(40.75736962, -73.83414849),
+  control_scale=True, zoom_start=11
+  #max_bounds=True,
+  #zoom_start=6,
+  #min_lat=min_lat,
+  #max_lat=max_lat,
+  #min_lon=min_lon,
+  #max_lon=max_lon
+)       
+
+#folium.CircleMarker([max_lat, min_lon], tooltip="Upper Left Corner").add_to(m)
+#folium.CircleMarker([min_lat, min_lon], tooltip="Lower Left Corner").add_to(m)
+#folium.CircleMarker([min_lat, max_lon], tooltip="Lower Right Corner").add_to(m)
+#folium.CircleMarker([max_lat, max_lon], tooltip="Upper Right Corner").add_to(m)   
+
+# Dynamic popup
+
+MyAppToken= 'qydv1FJZD87b8NQb4kxMP8TUE'
+client = Socrata("data.cityofnewyork.us", MyAppToken,
+username='ga1193@nyu.edu',
+password='PWT*jbq*pjk*aur9tyk'
+)
+rain_garden = client.get("df32-vzax", content_type="geojson",
+where="asset_type='Rain Garden'")
+
+bus_shelters = client.get("t4f2-8md7", content_type="geojson",
+where="boro_name = 'Queens'")
+
+litter_baskets = client.get("8znf-7b2c", content_type="geojson")
+
+
+#geo_json_data = requests.get(
+#     'https://data.cityofnewyork.us/resource/df32-vzax.geojson'
+#).json()
+
+```
+
+```{python}
+# Read in DEP data from api
+import requests
+
+fg_rg = folium.FeatureGroup(name="Rain Gardens", control=True,show=False).add_to(m)
+fg_bs = folium.FeatureGroup(name="Bus Shelters", control=True,show=False).add_to(m)
+fg_lb = folium.FeatureGroup(name="Litter Basket", control=True,show=False).add_to(m)
+
+
+folium.GeoJson(rain_garden,overlay=True, zoom_on_click=True,
+marker=folium.Marker(icon=folium.Icon(icon='star')),
+style_function=lambda x: {
+        'markerColor': 'blue'},
+        popup=folium.GeoJsonPopup(fields=["asset_id", "constructed_date","status"])).add_to(fg_rg)
+folium.GeoJson(bus_shelters,overlay=True,
+marker=folium.Marker(icon=folium.Icon(icon='star')),
+style_function=lambda x: {
+        'markerColor': 'red'}).add_to(fg_bs)
+folium.GeoJson(litter_baskets,overlay=True,
+marker=folium.Marker(icon=folium.Icon(icon='star')),
+style_function=lambda x: {
+        'markerColor': 'green'}).add_to(fg_lb)
+
+
+folium.LayerControl().add_to(m)
+#folium.Marker([40.75736962, -73.83414849], popup=html).add_to(m)
+#folium.GeoJson(rain_garden).add_to(m)
+#folium.GeoJson(bus_shelters).add_to(m)
+
+m
+
+```
+
+
+```{python}
+# Generate a filter based on score
+
+```
+
+```{python}
+
+```
+
+## Conclusions
+
+1. **Analysis/Results will go here**: TBD

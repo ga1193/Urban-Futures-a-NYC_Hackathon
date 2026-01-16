@@ -1,0 +1,5 @@
+shiny
+seaborn
+pandas = 3.11
+folium
+jupyter
