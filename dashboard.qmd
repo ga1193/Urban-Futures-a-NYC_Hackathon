@@ -81,6 +81,8 @@ geo_df_list = [[point.xy[1][0], point.xy[0][0]] for point in geo_df.geometry]
 ```
 
 ```{python}
+#| echo: false
+
 community_orgs = pd.read_excel('C:/Users/gastudillo.SONOMATECH/OneDrive - spherosenvironmental.com/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/community_orgs.xlsx')
 geometry = gpd.points_from_xy(community_orgs.Lat,community_orgs.Lon)
 geo_df_co = gpd.GeoDataFrame(
@@ -165,14 +167,8 @@ m
 ```
 
 
-```{python}
-# Generate a filter based on score
-```
+## Model Results
 
-```{python}
+**Input Parameters**: 
 
-```
-
-## Conclusions
-
-1. **Analysis/Results will go here**: TBD
+{{< embed LEAP_Hackathon-2.ipynb#model-fxn echo=false >}}
