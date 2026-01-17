@@ -78,6 +78,19 @@ geo_df.head()
 
 geo_df_list = [[point.xy[1][0], point.xy[0][0]] for point in geo_df.geometry]
 
+```
+
+```{python}
+community_orgs = pd.read_excel('C:/Users/gastudillo.SONOMATECH/OneDrive - spherosenvironmental.com/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/community_orgs.xlsx')
+geometry = gpd.points_from_xy(community_orgs.Lat,community_orgs.Lon)
+geo_df_co = gpd.GeoDataFrame(
+    community_orgs, geometry=geometry
+)
+
+geo_df_co.head()
+
+geo_df_co_list = [[point.xy[1][0], point.xy[0][0]] for point in geo_df.geometry]
+
 
 ```
 
@@ -91,6 +104,8 @@ fg_rg = folium.FeatureGroup(name="Rain Gardens", control=True,show=False).add_to
 fg_bs = folium.FeatureGroup(name="Bus Shelters", control=True,show=False).add_to(m)
 fg_lb = folium.FeatureGroup(name="Litter Basket", control=True,show=False).add_to(m)
 fg_pd = folium.FeatureGroup(name="Pedestrian Data", control=True,show=False).add_to(m)
+fg_co = folium.FeatureGroup(name="Community Orgs", control=True,show=False).add_to(m)
+
 
 
 
@@ -114,18 +129,35 @@ folium.LayerControl().add_to(m)
 #folium.GeoJson(rain_garden).add_to(m)
 #folium.GeoJson(bus_shelters).add_to(m)
 
+i = 0
 for coordinates in geo_df_list:
-# assign a color marker for the type of volcano, Strato being the most common
 # Place the markers with the popup labels and data
-        mp.add_child(
-                type_color = "purple",
+        type_color = "purple",
+        fg_pd.add_child(
+                
                 folium.Marker(
                 location=coordinates,
                 icon=folium.Icon(color="%s" % type_color),
+                popup="5 Year Avg Foot Traffic: " + str(geo_df['Last 5 Year Average'][i])
                 )
         
         )
         i = i + 1
+
+j = 0
+for coordinates in geo_df_co_list:
+# Place the markers with the popup labels and data
+        type_color = "yellow",
+        fg_co.add_child(
+                
+                folium.Marker(
+                location=coordinates,
+                icon=folium.Icon(color="%s" % type_color),
+                popup="Local Org: " + str(geo_df_co.Org[j])
+                )
+        
+        )
+        j = j
 
 
 m
@@ -135,7 +167,6 @@ m
 
 ```{python}
 # Generate a filter based on score
-
 ```
 
 ```{python}
