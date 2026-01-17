@@ -82,7 +82,7 @@ geo_df_list = [[point.xy[1][0], point.xy[0][0]] for point in geo_df.geometry]
 
 ```{python}
 #| echo: false
-
+import geopandas as gpd
 community_orgs = pd.read_excel('C:/Users/gastudillo.SONOMATECH/OneDrive - spherosenvironmental.com/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/community_orgs.xlsx')
 geometry = gpd.points_from_xy(community_orgs.Lat,community_orgs.Lon)
 geo_df_co = gpd.GeoDataFrame(
@@ -115,15 +115,15 @@ folium.GeoJson(rain_garden,overlay=True, zoom_on_click=True,
 marker=folium.Marker(icon=folium.Icon(icon='star')),
 style_function=lambda x: {
         'markerColor': 'blue'},
-        popup=folium.GeoJsonPopup(fields=["asset_id", "constructed_date","status"])).add_to(fg_rg)
+        popup=folium.GeoJsonPopup(fields=["gi_id", "constructed_date","status"])).add_to(fg_rg)
 folium.GeoJson(bus_shelters,overlay=True,
 marker=folium.Marker(icon=folium.Icon(icon='star')),
 style_function=lambda x: {
-        'markerColor': 'red'}).add_to(fg_bs)
+        'markerColor': 'purple'}).add_to(fg_bs)
 folium.GeoJson(litter_baskets,overlay=True,
 marker=folium.Marker(icon=folium.Icon(icon='star')),
 style_function=lambda x: {
-        'markerColor': 'green'}).add_to(fg_lb)
+        'markerColor': 'yellow'}).add_to(fg_lb)
 
 
 folium.LayerControl().add_to(m)
@@ -155,7 +155,7 @@ for coordinates in geo_df_co_list:
                 folium.Marker(
                 location=coordinates,
                 icon=folium.Icon(color="%s" % type_color),
-                popup="Local Org: " + str(geo_df_co.Org[j])
+                popup="Local Org: " + str(geo_df_co['Org'][j])
                 )
         
         )
@@ -169,6 +169,37 @@ m
 
 ## Model Results
 
-**Input Parameters**: 
+
+
+**Top 15 Sites to Maintain**
+```{python}
+#| echo: false
+
+file_path = "rain_garden_maintenance_priority.ods"
+df = pd.read_excel(file_path, engine="odf")
+
+
+# Center map
+center_lat = df["lat"].mean()
+center_lon = df["lon"].mean()
+
+#m = folium.Map(location=[center_lat, center_lon], zoom_start=12, tiles="OpenStreetMap")
+
+for _, r in df.iterrows():
+    prio = int(r["priority"])
+    color = "green" if 1 <= prio <= 5 else "orange"
+    
+    popup = folium.Popup(f"Priority: {prio}", max_width=250)
+    
+    # Pin-like marker (FontAwesome)
+    folium.Marker(
+        location=[r["lat"], r["lon"]],
+        popup=popup,
+        icon=folium.Icon(color=color, icon="map-marker", prefix="fa"),
+    ).add_to(m)
+m
+```
+
+**Model Output**: 
 
 {{< embed LEAP_Hackathon-2.ipynb#model-fxn echo=false >}}
