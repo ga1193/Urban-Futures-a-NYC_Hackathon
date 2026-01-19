@@ -36,10 +36,10 @@ m = folium.Map(location=(40.75736962, -73.83414849),
 #folium.CircleMarker([min_lat, max_lon], tooltip="Lower Right Corner").add_to(m)
 #folium.CircleMarker([max_lat, max_lon], tooltip="Upper Right Corner").add_to(m)   
 
-MyAppToken= 'qydv1FJZD87b8NQb4kxMP8TUE'
+MyAppToken= ["insert_here"]
 client = Socrata("data.cityofnewyork.us", MyAppToken,
-username='ga1193@nyu.edu',
-password='PWT*jbq*pjk*aur9tyk'
+username= ['insert_here'],
+password=['inset_here']
 )
 rain_garden = client.get("df32-vzax", content_type="geojson",
 where="asset_type='Rain Garden'")
@@ -61,13 +61,12 @@ litter_baskets = client.get("8znf-7b2c", content_type="geojson")
 # Adding pedestrian data to map
 import pandas as pd
 import geopandas as gpd
-pedestrian_data = pd.read_csv('C:/Users/gastudillo.SONOMATECH/OneDrive - spherosenvironmental.com/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/Pedestrian_Data.csv')
+pedestrian_data = pd.read_csv('~/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/Pedestrian_Data.csv')
 ped_data = pedestrian_data.loc[:, ("the_geom", "Longitude", "Latitude", "OBJECTID", "Loc", "Borough","Street_Nam","From_Stree","To_Street","Iex", "Last 5 Year Average")]
 #ped_data.info()
 
 y = ped_data.Latitude.str.strip("'")
 x = ped_data.Longitude.str.strip("'")
-#shp_map1 = gpd.read_file(('C:/Users/gastudillo.SONOMATECH/OneDrive - spherosenvironmental.com/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/school_locations/SchoolPoints_APS_2024_08_28'))
 
 geometry = gpd.points_from_xy(x,y)
 geo_df = gpd.GeoDataFrame(
@@ -83,7 +82,7 @@ geo_df_list = [[point.xy[1][0], point.xy[0][0]] for point in geo_df.geometry]
 ```{python}
 #| echo: false
 import geopandas as gpd
-community_orgs = pd.read_excel('C:/Users/gastudillo.SONOMATECH/OneDrive - spherosenvironmental.com/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/community_orgs.xlsx')
+community_orgs = pd.read_excel('~/Documents/GitHub/Urban-Futures-a-NYC_Hackathon/data/community_orgs.xlsx')
 geometry = gpd.points_from_xy(community_orgs.Lat,community_orgs.Lon)
 geo_df_co = gpd.GeoDataFrame(
     community_orgs, geometry=geometry
